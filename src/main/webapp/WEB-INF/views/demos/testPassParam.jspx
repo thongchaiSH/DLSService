@@ -1,0 +1,15 @@
+<div xmlns:spring="http://www.springframework.org/tags"   xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"  xmlns:form="http://www.springframework.org/tags/form"  xmlns:c="http://java.sun.com/jsp/jstl/core"  xmlns:jsp="http://java.sun.com/JSP/Page"    version="2.0">
+  <jsp:directive.page contentType="text/html;charset=UTF-8" />
+  <jsp:output omit-xml-declaration="yes" />
+  
+<div class="container-fluid" style="padding-top:15px;">
+    <div class="btn btn-default" id="button">
+        Test
+    </div>
+</div>
+
+<!-- load js -->
+<spring:url value="${urls.getForLookupPath('/resources/scripts/application/demos/testPassParam.js')}" var="testPassParam" />
+<script type="text/javascript"  src="${testPassParam}" ><!-- required for FF3 and Opera --></script>
+
+</div>

@@ -1,0 +1,286 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+     xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core"
+     xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <!--<spring:url value="/resources/j_spring_security_check" var="form_url"/>-->
+    <c:url value="/j_spring_security_check" var="loginUrl"/>
+
+    <spring:message text="security_login_title" var="title" htmlEscape="false"/>
+    <spring:message code="LB0001.security_username" var="label_security_username"/>
+    <spring:message code="LB0002.security_password" var="label_security_password"/>
+    <spring:message code="LB0003.email" var="label_email" text="label_email"/>
+    <spring:message code="LB0004.reset_password" var="reset_password" text="reset_password"/>
+    <spring:message code="LB0005.forget_password" var="label_forget_password" text="label_forget_password"/>
+    <spring:message code="LB0006.back_to_login" var="label_back_to_login" text="label_back_to_login"/>
+    <spring:message code="BT0001.login" var="button_login"/>
+    <spring:message code="application_name" var="APPLICATION_NAME"/>
+
+
+    <spring:message code="LB0645" var="ERR01" text="ไม่พบข้อมูลผู้ใช้งานที่ลงทะเบียนด้วย E-mail {param} ในระบบs"/>
+    <spring:message code="LB0646" var="eMailWrongFormat" text="รูปแบบ E-mail ไม่ถูกต้องs"/>
+    <spring:message code="LB0647" var="eCheckEmail" text="กรุณาตรวจสอบรหัสผ่านใน E-mail {param}s"/>
+
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            background-image: url("/MMC/resources/images/bg.jpg");
+        }
+
+        @media (max-width: 500px) {
+            h3 {
+                font-size: 20px !important;
+            }
+
+            h4 {
+                font-size: 15px !important;
+            }
+
+            .btn-reset {
+                width: 100% !important;
+            }
+        }
+
+        /*@media (max-height: 400px) {*/
+        /*#container{*/
+        /*margin-top: -50px;*/
+        /*}*/
+        /*}*/
+
+        .popover-content {
+            color: black;
+        }
+
+        .image-contain {
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+
+        .dv-loading {
+            -webkit-animation: spin 1.5s infinite linear;
+        }
+
+        /* Pre Loader */
+        .dv-loading {
+            position: fixed;
+            z-index: 3000;
+            left: 50%;
+            top: 50%;
+            margin: -25px 0 0 -25px;
+        }
+
+        .dv-background {
+            opacity: 0.3;
+            filter: alpha(opacity=30);
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            position: fixed;
+            top: 1px;
+            z-index: 2000;
+
+        }
+
+        @font-face {
+            font-family: THSarabunPSK;
+            src: url('/MMC/resources/fonts/THSarabun.ttf') format('truetype');
+        }
+
+        .sweet-alert button {
+            font-family: THSarabunPSK;
+        }
+
+        /*h3{*/
+        /*font-size: 31px !important;*/
+        /*}*/
+        /*h4{*/
+        /*font-size: 22px !important;*/
+        /*}*/
+    </style>
+
+    <spring:url value="/resources/styles/cas/bootstrap.min.css" var="bootstrap_min"/>
+    <link rel="stylesheet" type="text/css" href="${bootstrap_min}"/>
+    <spring:url value="/resources/styles/cas/login.css" var="login"/>
+    <link rel="stylesheet" type="text/css" href="${login}"/>
+
+    <spring:url value="/resources/scripts/jquery-1.11.1.min.js" var="jquery"/>
+    <script type="text/javascript" src="${jquery}"><!-- required for FF3 and Opera --></script>
+    <spring:url value="/resources/scripts/bootstrap.min.js" var="bootstrap"/>
+    <script type="text/javascript" src="${bootstrap}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="/resources/scripts/login/login.js" var="loginJs"/>
+    <script type="text/javascript" src="${loginJs}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="/resources/scripts/sweetalert.min.js" var="sweetalert_min_js"/>
+    <script src="${sweetalert_min_js}" type="text/javascript"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="/resources/styles/sweetalert.css" var="sweetalert_css_url"/>
+    <link rel="stylesheet" type="text/css" href="${sweetalert_css_url}"/>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/modalMessage.js')}" var="modalMessage"/>
+    <script type="text/javascript" src="${modalMessage}"><!-- required for FF3 and Opera --></script>
+
+    <!--<spring:url value="/resources/styles/common.css" 					var="common_css_url" />-->
+    <!--<link rel="stylesheet" type="text/css" href="${common_css_url}" />-->
+    <!--<link rel="icon" href="${faviconPage}" />-->
+
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js" type="text/javascript"></script>-->
+
+
+    <script type="text/javascript">
+        var Message = {};
+        Message.ERR01 = '${ERR01}';
+        Message.eMailWrongFormat = '${eMailWrongFormat}';
+        Message.eCheckEmail = '${eCheckEmail}';
+        var _currentDate='${timeCurrent}';
+        _currentDate= new Date(parseInt(_currentDate))
+
+        console.log("L");
+    </script>
+
+    <div class="dv-background" style="display: none;">
+        <div class="dv-loading">
+            <spring:url value="/resources/images/ess-loader.png" var="image_loader_url"/>
+            <div class="image-contain" style="background-image: url(${image_loader_url}); width:30px;height:30px;">
+                <jsp:text/>
+            </div>
+        </div>
+    </div>
+
+
+    <body id="cas">
+    <div id="container">
+        <div class="row login_box col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2"
+             id="loginForm" align="center" style="margin-top: 20px;margin-bottom: 20px">
+            <form name="f" action="${loginUrl}" method="POST" role="form" style="padding-top: 40px;">
+                <div class="login-wrap">
+                    <div class="login-html">
+                        <div class="login-form">
+                            <div class="sign-in-htm">
+                                <div class="col-md-12 col-xs-12" align="center">
+                                    <div class="line">
+                                        <jsp:text/>
+                                    </div>
+                                    <div><img src="/MMC/resources/images/LogoLogin.jpg"
+                                              class="img-responsive image-circle"/></div>
+                                    <h3>${APPLICATION_NAME}</h3>
+                                </div>
+                                <div class="col-md-12 col-xs-12 follow" align="center" style="height: 40px;padding-bottom: 0px  ">
+                                    <h4 id="nowDate"></h4>
+                                </div>
+                                <div class="col-md-12 col-xs-12 follow" align="center" >
+                                    <h4 id="timeNow"></h4>
+                                </div>
+
+                                <div class="col-md-12 col-xs-12 login_control">
+                                    <div class="login_control_form">
+                                        <div class="form-group ">
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-3" style="padding: 0px;padding-top: 10px;text-align: left">
+                                                    <label style="font-size: 18px;font-weight: lighter"
+                                                           for="j_username">Username</label>
+                                                </div>
+                                                <div class="col-sm-9" style="padding: 0px">
+                                                <input id="j_username" type="text" class="form-control"
+                                                       name="j_username"
+                                                       autocomplete="off"
+                                                       placeholder="${label_security_username}" validate="true"/>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-3" style="padding: 0px;padding-top: 10px;text-align: left">
+                                                    <label style="font-size: 18px;font-weight: lighter"
+                                                           for="j_password">Password</label>
+                                                </div>
+                                                <div class="col-sm-9" style="padding: 0px">
+                                                    <input id="j_password" type="password" class="form-control "
+                                                           name="j_password" autocomplete="off"
+                                                           placeholder="${label_security_password}" validate="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-12 text-center">
+                                                <a style="cursor: pointer"
+                                                   onclick="openForgotPassword()">${label_forget_password}</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div align="center">
+                                                <div style="margin-top: 15px;text-align: center">
+                                                    <input class="btn btn-green" name="submit" accesskey="l"
+                                                           value="LOGIN"
+                                                           tabindex="4" type="submit"/>
+                                                    <input class="btn btn-orange" name="reset" accesskey="c"
+                                                           value="CLEAR"
+                                                           tabindex="5" type="reset"/>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                            <input type="hidden" id="screen_width" name="screen_width" value=""/>
+                                            <input type="hidden" id="screen_height" name="screen_height" value=""/>
+                                            <input type="hidden" name="spring-security-redirect"
+                                                   value="${sessionScope.redirect_url}"/>
+                                            <script type="text/javascript">
+                                                document.getElementById('screen_width').value = screen.width;
+                                                document.getElementById('screen_height').value = screen.height;
+                                            </script>
+                                        </div>
+                                    </div>
+
+                                    <div class="forgotpassword_control" style="display: none">
+
+                                        <div class="form-group ">
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-2" style="padding: 0px;padding-top: 10px ">
+                                                    <label style="font-size: 18px;font-weight: lighter"
+                                                           for="f_email">${label_email}</label>
+                                                </div>
+                                                <div class="col-sm-10" style="padding: 0px">
+                                                    <input id="f_email" type="text" class="form-control" name="f_email"
+                                                           autocomplete="off"
+                                                           placeholder="${label_email}"
+                                                           data-toggle="popover"
+                                                           data-content="กรุณากรอกข้อมูล"
+                                                           data-placement="bottom"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div align="center">
+                                                <div style="margin-top: 15px;text-align: center">
+                                                    <input onclick="resetPassword()" class="btn btn-green btn-reset"
+                                                           style="width: 50%" type="button"
+                                                           value="${reset_password}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12 text-center">
+                                                <a style="cursor: pointer"
+                                                   onclick="openLoginForm()">${label_back_to_login}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="msg" class="bg-danger text-center text-danger"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </body>
+</div>
+

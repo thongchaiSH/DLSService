@@ -1,0 +1,256 @@
+<div id="header" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+     xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:spring="http://www.springframework.org/tags"
+     xmlns:sec="http://www.springframework.org/security/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <jsp:useBean class="java.util.Date" id="now" scope="request"/>
+    <c:set var="lang" value="${fn:toUpperCase(pageContext.response.locale)}" scope="request"/>
+    <c:set var="user" value="${pageContext.request.userPrincipal.name}" scope="request"/>
+    <c:set var="storeCode" value="${sessionScope.storeCode}" scope="request"/>
+    <c:set var="storeId" value="${sessionScope.storeId}" scope="request"/>
+    <c:set var="storeEngName" value="${sessionScope.storeEngName}" scope="request"/>
+    <c:set var="storeLocalName" value="${sessionScope.storeLocalName}" scope="request"/>
+    <spring:url var="logout" value="/logout"/>
+    <spring:url value="/logout" var="sign_out_url"/>
+
+    <!--initial SPRING MESSAGE-->
+    <c:set scope="request" var="MS_DATA_CHANGE"><spring:message code="LB0343" text="ข้อมูลมีการเปลี่ยนแปลงต้องการยกเลิกหรือไม่s"/></c:set>
+    <c:set scope="request" var="MS_CANCEL_FOR_EDIT"><spring:message code="LB0438" text="กดตกลงเพื่อทำการยกเลิกการแก้ไขข้อมูลs"/></c:set>
+    <c:set scope="request" var="MS_OK_FOR_BACK"><spring:message code="LB0439" text="กดยกเลิกเพื่อกลับไปแก้ไขข้อมูลs"/></c:set>
+    <c:set scope="request" var="MS_NOT_FOUND_DATA_PRINT"><spring:message code="LB0401" text="ไม่พบข้อมูลs"/></c:set>
+    <c:set scope="request" var="LABEL_PRINT"><spring:message code="LB0504" text="PRINTs"/></c:set>
+    <c:set scope="request" var="LABEL_PDF"><spring:message code="LB0505" text="PDFs"/></c:set>
+    <c:set scope="request" var="LABEL_EXCEL"><spring:message code="LB0506" text="EXCELs"/></c:set>
+    <c:set scope="request" var="MESSAGE_ERROR"><spring:message code="LB0532" text="ไม่สามารถทำรายการได้ กรุณาติดต่อผู้ดูแลระบบs"/></c:set>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/dist/jquery.techbytarun.excelexportjs.js')}"
+                var="jquery_btechco_excelexport"/>
+    <script type="text/javascript"
+            src="${jquery_btechco_excelexport}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/dist/jspdf.debug.js')}"
+                var="jspdf_debug"/>
+    <script type="text/javascript"
+            src="${jspdf_debug}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/dist/FileSaver.js')}"
+                var="FileSaver"/>
+    <script type="text/javascript"
+            src="${FileSaver}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/dist/html2canvas.js')}"
+                var="html2canvas"/>
+    <script type="text/javascript"
+            src="${html2canvas}"><!-- required for FF3 and Opera --></script>
+
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/dist/printThis.js')}"
+                var="printThis"/>
+    <script type="text/javascript"
+            src="${printThis}"><!-- required for FF3 and Opera --></script>
+
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/dist/jszip.min.js')}"
+                var="jszip"/>
+    <script type="text/javascript" src="${jszip}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/dist/kendo.all.min.js')}"
+                var="kendo"/>
+    <script type="text/javascript" src="${kendo}"><!-- required for FF3 and Opera --></script>
+    <!--<script  type="text/javascript" src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.all.min.js">&lt;!&ndash; required for FF3 and Opera &ndash;&gt;</script>-->
+
+
+    <script type="text/javascript">
+        var initialMessage = {};
+        initialMessage.MS_DATA_CHANGE = '${MS_DATA_CHANGE}';
+        initialMessage.MS_CANCEL_FOR_EDIT = '${MS_CANCEL_FOR_EDIT}';
+        initialMessage.MS_OK_FOR_BACK = '${MS_OK_FOR_BACK}';
+        initialMessage.MS_NOT_FOUND_DATA_PRINT = '${MS_NOT_FOUND_DATA_PRINT}';
+        initialMessage.LABEL_PRINT='${LABEL_PRINT}'
+        initialMessage.LABEL_PDF='${LABEL_PDF}'
+        initialMessage.LABEL_EXCEL='${LABEL_EXCEL}'
+        initialMessage.MESSAGE_ERROR='${MESSAGE_ERROR}'
+
+        var initialData = {
+            // limitPaging: "${limitPaging}",
+            // limitPagingLov: "${limitPagingLov}",
+            // parameterNo8: JSON.parse('${parameterNo8}'),
+            // dataOfCustomerLogin: JSON.parse('${dataOfCustomerLogin}'),
+            // sessionId: "${sessionId}",
+        }
+        var session = {
+            // lang: "${lang}",                                             // the language is page language (eg. TH, EN)
+            // context: '${pageContext.request.contextPath}',              // the context path
+            // date: new Date(Number("${now.time}")).setHours(0, 0, 0, 0),    // the current date without time
+            // time: new Date(Number("${now.time}")),                      // the current date with time
+            // user: "${user}",
+            // userName: "${userNameHeader}",
+            // initialData: initialData,
+            // timeout: parseInt("${pageContext.session.maxInactiveInterval}"),
+        };
+        // UtilPagination.setLimitData(session.initialData.limitPaging);
+        //        $(document).ready(function () {
+        //            session.initialData = JSON.parse(session.initialData);
+        //        });
+        var csrfParameter = '${_csrf.parameterName}';
+        var csrfToken = '${_csrf.token}';
+
+        var variableconstraints = {}
+
+    </script>
+
+    <style>
+        /* Navigation Left Side Bar Color */
+        /* Button */
+            @media print
+        {
+            table.gridtable     { page-break-after: auto; }
+            table.gridtable   tr    { page-break-inside:avoid;page-break-after: auto; }
+            table.gridtable   td    { page-break-inside:avoid; page-break-after:auto }
+            table.gridtable   thead { display:table-header-group }
+            table.gridtable   tfoot { display:table-footer-group }
+
+        }
+
+        @media print {
+            body {-webkit-print-color-adjust: exact;}
+        }
+
+        .navbar-material-grey-800.navbar {
+            background-color: #4291e2;
+            color: rgb(240, 255, 255);
+        }
+
+        .fa-home {
+            font-size: 1.5rem;
+        }
+
+        .container {
+            padding-top: 7em;
+        }
+
+        .modal-backdrop {
+            background: rgba(247, 245, 245, 0.96);
+        }
+
+        .trblue {
+            background-color: rgba(0, 188, 212, 0.37) !important;
+        }
+
+        .dv-loading {
+            -webkit-animation: spin 1.5s infinite linear;
+        }
+
+        @-moz-keyframes spin {
+            from {
+                -moz-transform: rotate(0deg);
+            }
+            to {
+                -moz-transform: rotate(360deg);
+            }
+        }
+
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+    </style>
+
+    <!-- Initial I18N -->
+    <c:set scope="request" var="LABEL_MENU"><spring:message code="LABEL_MENU"/></c:set>
+    <c:set scope="request" var="LABEL_LANGUAGE"><spring:message code="LABEL_LANGUAGE"/></c:set>
+    <c:set scope="request" var="LABEL_HOME"><spring:message text="หน้าแรก"/></c:set>
+    <c:set scope="request" var="LABEL_LOG_ON_AS"><spring:message code="LB0084" text="LogOn As :"/></c:set>
+    <c:set scope="request" var="LABEL_LOG_OUT"><spring:message code="LB0086" text="Log Out"/></c:set>
+    <c:set scope="request" var="BUTTON_LOGOUT"><spring:message code="BUTTON_LOGOUT"/></c:set>
+    <c:set scope="request" var="BUTTON_CLOSE_MENU"><spring:message code="BUTTON_CLOSE_MENU"/></c:set>
+    <c:set scope="request" var="BUTTON_MAIN_MENU"><spring:message code="BUTTON_MAIN_MENU"/></c:set>
+    <c:set scope="request" var="BUTTON_LANGUAGE"><spring:message code="BUTTON_LANGUAGE"/></c:set>
+    <c:set scope="request" var="BUTTON_LANGUAGE_TH"><spring:message code="BUTTON_LANGUAGE_TH"/></c:set>
+    <c:set scope="request" var="BUTTON_LANGUAGE_EN"><spring:message code="BUTTON_LANGUAGE_EN"/></c:set>
+    <c:set scope="request" var="LABEL_SESSION_EXP"><spring:message code="LB0485" text="เซสชั่นของคุณหมดอายุs"/></c:set>
+    <c:set scope="request" var="LABEL_PLZ_LOGIN"><spring:message code="LB0486" text="กรุณาเข้าสู่ระบบใหม่อีกครั้งs"/></c:set>
+
+    <spring:url value="/resources/images/user.png" var="img_user"/>
+    <div class="dv-background" style="display: none;">
+        <div class="dv-loading">
+            <spring:url value="/resources/images/ess-loader.png" var="image_loader_url"/>
+            <div class="image-contain" style="background-image: url(${image_loader_url}); width:30px;height:30px;">
+                <jsp:text/>
+            </div>
+        </div>
+    </div>
+    <style>
+        .cssHeader a {
+            color: #f7f7f7;
+        }
+
+        #headerBtnLogOut:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width:600px) {
+            .cssHeader label {
+                display: none;
+                /*max-width:10px;*/
+            }
+        }
+
+
+    </style>
+
+    <div class="navbar navbar-fixed-top navbar-material-grey-800" role="navigation" style="background-color: #347AB6;position: absolute;position: fixed;width: 100%;overflow: hidden">
+        <div class="container-fluid" style="height:20px;">
+            <div class="scroll cssHeader" style="text-align: center;display: inline-block;position: absolute;width:98%;  ">
+                <div  style="float: left;display: inline-block;">
+
+                    <div class="navbar-header" style="display: inline-block;">
+                        <div id="trigger" class="st-trigger-effects">
+                            <div id="data_effect-st" data-effect="st-effect-13">
+                        <span id="hamburger" class="hamburger hamburger--collapse">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                    <label style="margin-bottom: 0px">${LABEL_LOG_ON_AS} ${userNameHeader} </label>
+                </div>
+                <div class="center" style=" display:inline-block">
+                    <a style="text-decoration:underline" href="/MMC/main">${LABEL_HOME}</a>
+                </div>
+                <div style="float: right;display:inline-block;margin-right: 15px;">
+                    <label id="_headerLbDate" style="padding: 0px;margin-bottom: 0px">
+                        <jsp:text/>
+                    </label>
+                    <a id="headerBtnLogOut" href="javascript:submitlogout()" >${LABEL_LOG_OUT}</a>
+                </div>
+            </div>
+            <!-- <div class="collapse navbar-collapse" id="navbar-collapse-1"> -->
+            <sec:authentication var="principal" property="principal"/>
+
+            <form action="${fn:escapeXml(sign_out_url)}" method="post" id="logoutForm">
+                <input type="hidden"
+                       name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
+            </form>
+
+        </div>
+    </div>
+
+</div> 

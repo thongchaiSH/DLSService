@@ -1,0 +1,120 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+     xmlns:form="http://www.springframework.org/tags/form" xmlns:c="http://java.sun.com/jsp/jstl/core"
+     xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+
+    <c:set scope="request" var="MS_NOT_FOUND_DATA"><spring:message code="LB0401" text="ไม่พบข้อมูล_s"/></c:set><!--ไม่พบข้อมูล-->
+
+    <div class="container-fluid" style="padding-top:15px;">
+        <div class="row topic-header">
+            <span style="font-size: 30px;">${LB_PAGE}</span>
+            <hr/>
+        </div>
+        <div class="content-body">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <!--css text-decoration: none; for remove underline-->
+                            <a style="text-decoration: none;" data-toggle="collapse" name="toggle"
+                               href="#collapseTablePurchaseItems"> ${LB_SEARCH}
+                                <span id="iconCollapseTablePurchaseItems" class="fa fa-caret-up"><jsp:text/></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <!-- collapse in open when load page-->
+                    <div id="collapseTablePurchaseItems" class="panel-collapse collapse in"
+                         style="padding-bottom: 10px">
+                        <div class="panel-body" style="padding-top: 10px">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center">
+                            <button id="btnSearch" type="button"
+                                    class="btn btn-sm btn-primary">&#160;&#160;${BT_SEARCH}&#160;&#160;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body" style="margin-top:-10px">
+                <div class="form-group">
+                    <div style="float: left">
+                        <button type="button" class="btn btn-sm btn-info " id="btnAddNews">
+                            ${LB_ADD}&#160;
+                            <span style="font-size: 15px" class="fa  fa-plus-circle"></span>
+                        </button>
+                    </div>
+                    <!-- button print report Table-->
+                    <div style="float: right;">
+
+                        <div style="display:inline-block">
+                            <select class="form-control" id="ddlTablePrintReport">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div style="display:inline-block;margin: 5px">
+                        <button table="table-id" onclick="printTableReport(this)" style="font-size: 20px;cursor: pointer;padding: 0px"
+                                class="fa fa-print"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="table-id" style="margin-bottom: 0px">
+                            <thead>
+                            <tr>
+                                <!-- don't forget  css vertical-align: middle;-->
+                                <th export="none" class="text-center" onclick="sortData(this)"
+                                    style="color:black;width: 7%;vertical-align: middle;">
+                                    ${LB_DATE_NOTIFICATION}   <span class="fa fa-caret-up"
+                                                                    style="display:none;"><jsp:text/></span>
+                                </th>
+                                <th class="text-center"
+                                    style="color:black;width: 7%;vertical-align: middle;">
+                                    ${LB_DETAIL}  <span class="fa fa-caret-up" style="display:none;"><jsp:text/></span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="dataGrid">
+                            <jsp:text/>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-no-data" id="noItemDrugItems" style="display: none">
+                        ${LB_NO_DATA}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <util:pagingutil id="paggingSearchMain"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+
+    <!-- modal preview Image-->
+    <jsp:include page="/WEB-INF/views/util/modalImage.jspx"></jsp:include>
+    <!-- load js -->
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/util/UtilForm.js')}" var="utilForm"/>
+    <script type="text/javascript" src="${utilForm}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/modalMessage.js')}" var="modalMessage"/>
+    <script type="text/javascript" src="${modalMessage}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/util/UtilFormDataChangeValidation.js')}"
+                var="UtilFormDataChangeValidation"/>
+    <script type="text/javascript" src="${UtilFormDataChangeValidation}"><!-- required for FF3 and Opera --></script>
+
+
+</div>

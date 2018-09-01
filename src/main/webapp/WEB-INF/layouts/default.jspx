@@ -1,0 +1,157 @@
+<html xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:tiles="http://tiles.apache.org/tags-tiles" xmlns:spring="http://www.springframework.org/tags"
+      xmlns:util="urn:jsptagdir:/WEB-INF/tags/util">
+
+<jsp:output doctype-root-element="HTML" doctype-system="about:legacy-compat"/>
+
+<jsp:directive.page contentType="text/html;charset=UTF-8"/>
+<jsp:directive.page pageEncoding="UTF-8"/>
+
+<head>
+    <util:load-scripts/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>-->
+    <meta http-equiv="PRAGMA" content="NO-CACHE"/>
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+
+
+    <spring:url value="/resources/images/logo.png" var="appicon"/>
+    <!-- <link rel="SHORTCUT ICON" href="${appicon}"/> -->
+    <link rel="apple-touch-icon" sizes="60x60" href="${appicon}"/>
+
+    <spring:message code="application_name" var="app_name" htmlEscape="false"/>
+    <!--<title><spring:message code="welcome_h3" arguments="${app_name}"/></title>-->
+    <title>MCERP</title>
+    <meta name="apple-mobile-web-app-title" content="${app_name}"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+
+    <script type="text/javascript">
+
+        var stompClient = null;
+        // console.log = function() {};
+
+    </script>
+
+    <style>
+        body {
+            /*Smoot scrolling mobile*/
+            width: auto; height: auto;
+        }
+
+        html, body { height: 100%; width: 100%; }
+        img {
+            image-orientation: from-image;
+        }
+        /*for iphone screen*/
+        @media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+            .pull-left-xs {
+                text-align: left;
+            }
+        }
+
+        /*for iphone plus on landscape*/
+        @media only screen and (min-device-width: 414px) and (max-device-width: 736px)
+        and (orientation: landscape) {
+            .pull-left-xs {
+                text-align: left;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .pull-left-xs {
+                text-align: right;
+            }
+        }
+    </style>
+</head>
+
+<body class="tundra spring" style="-webkit-overflow-scrolling:touch">
+<tiles:insertAttribute name="header" ignore="true"/>
+
+
+<div class="container-mp" style="padding-top: 30px; background-color:#CDFFFF">
+    <!-- Push Wrapper -->
+    <div class="mp-pusher" id="mp-pusher" style="padding-top: 20px;">
+        <tiles:insertAttribute name="menu" ignore="true"/>
+        <div  class="scroller"
+             style="margin-top: -15px;"><!-- this is for emulating position fixed of the nav -->
+            <div class="scroller-inner">
+                <tiles:insertAttribute name="body"/>
+                <tiles:insertAttribute name="footer" ignore="true"/>
+            </div><!-- /scroller-inner -->
+        </div><!-- /scroller -->
+    </div><!-- /pusher -->
+</div><!-- /container -->
+
+<!--.touch {-->
+<!-- -webkit-overflow-scrolling: touch;-->
+<!--}-->
+<tiles:insertAttribute name="plugin" ignore="true"/>
+
+<spring:url value="/resources/scripts/classie.js" var="classie_js"/>
+<spring:url value="/resources/scripts/mlpushmenu.js" var="mlpushmenu_js"/>
+<!--<spring:url value="/resources/scripts/scriptLastOnLoad.js" var="scriptLastOnLoad"/>-->
+
+
+<!--<script type="text/javascript" src="${classie_js}">&lt;!&ndash; required for FF3 and Opera &ndash;&gt;</script>-->
+<!--<script type="text/javascript" src="${mlpushmenu_js}">&lt;!&ndash; required for FF3 and Opera &ndash;&gt;</script>-->
+<!--<spring:url value="${urls.getForLookupPath('/resources/scripts/util/tableHeadFixer.js')}" var="tableHeadFixer"/>-->
+<!--<script type="text/javascript" src="${tableHeadFixer}">&lt;!&ndash; required for FF3 and Opera &ndash;&gt;</script>-->
+
+<script type="text/javascript">
+    function onKeypressFunction(e) {
+        var keyCode = e.which || e.keyCode;
+        // console.log(keyCode);
+        if ($('.modal.fade.in').length > 0) {
+            if (keyCode == '27') {
+                hideDatePicker();
+                $('.ui-autocomplete').css('display', 'none')
+                idForSelect = "";
+            }
+        } else {
+            if (keyCode == '38' || keyCode == '40') {
+                if(!$(':focus')) {
+                    console.log('fucus out')
+                    hideDatePicker();
+                    $(':focus').blur();
+                }else{
+                    console.log('fucus in')
+                }
+            }
+        }
+    }
+
+
+    $('.modal').on('shown.bs.modal', function () {
+        $('body').css({'-webkit-overflow-scrolling':''});
+    });
+
+    $('.modal').on('hide.bs.modal', function () {
+        $('body').css({'-webkit-overflow-scrolling':'touch'});
+    });
+
+    function hideDatePicker() {
+        $('.xdsoft_datetimepicker.xdsoft_noselect.xdsoft_').each(function (k,v) {
+            if($(v).css('display')=='block'){
+                $(v).css('display','none')
+            }
+        });
+    }
+
+    window.onresize = function (event) {
+        console.log('resize');
+        onwheelFunction();
+    };
+
+
+
+</script>
+
+<script type="text/javascript" src="${scriptLastOnLoad}"><!-- required for FF3 and Opera --></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:component="urn:jsptagdir:/WEB-INF/tags/component" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+     xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+  <jsp:directive.page contentType="text/html;charset=UTF-8" />
+  <jsp:output omit-xml-declaration="yes" />
+  <spring:message var="app_name" code="application_name" htmlEscape="false" />
+  <spring:message var="title"    code="welcome_titlepane" arguments="${app_name}" htmlEscape="false" />
+  <!-- Load Internal CSS  -->
+  <spring:url value="/resources/styles/tablegray.css" var="table_gray" />
+  
+  <link rel="stylesheet" type="text/css" href="${table_gray}"/>
+  <spring:url value="/resources/images/access_denied.png" var="img_access_denied" />
+  
+  
+ <div class="container" style="padding-top: 5px;" >
+  	<div class="row">
+  		<div class="col-sm-12" style="text-align: center;" >
+  		    <img src="${img_access_denied}"  />
+  		</div>
+  	</div>
+  	
+  </div><!-- div .container -->
+  
+ 
+
+
+	  
+</div>

@@ -1,0 +1,477 @@
+<div xmlns:spring="http://www.springframework.org/tags" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util"
+     xmlns:form="http://www.springframework.org/tags/form" xmlns:c="http://java.sun.com/jsp/jstl/core"
+     xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+
+    <c:set scope="request" var="LB_CODE"><spring:message code="LB_CODE"/></c:set>
+    <c:set scope="request" var="LB_NAME"><spring:message code="LB_NAME"/></c:set>
+    <c:set scope="request" var="LB_DOCUMENT_NUMBER"><spring:message code="LB_DOCUMENT_NUMBER"/></c:set>
+    <c:set scope="request" var="LB_SAVED_DATE"><spring:message code="LB_SAVED_DATE"/></c:set>
+    <c:set scope="request" var="LB_RECIEVE_DATE"><spring:message code="LB_RECIEVE_DATE"/></c:set>
+    <c:set scope="request" var="LB_AMOUNT"><spring:message code="LB_AMOUNT"/></c:set>
+    <c:set scope="request" var="LB_DELETE"><spring:message code="LB_DELETE"/></c:set>
+
+    <style>
+        /* Style the Image Used to Trigger the Modal */
+        #myImg {
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #myImg:hover {
+            opacity: 0.7;
+        }
+
+        /* The Modal (background) */
+        .modalImage {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 25px;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0); /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+        }
+
+        /* Modal Content (Image) */
+        .modalImage-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        /* Caption of Modal Image (Image Text) - Same Width as the Image */
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            height: 150px;
+        }
+
+        /* Add Animation - Zoom in the Modal */
+        .modalImage-content, #caption {
+            -webkit-animation-name: zoom;
+            -webkit-animation-duration: 0.6s;
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+
+        @-webkit-keyframes zoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes zoom {
+            from {
+                transform: scale(0)
+            }
+            to {
+                transform: scale(1)
+            }
+        }
+
+        /* The Close Button */
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 100% Image Width on Smaller Screens */
+        @media only screen and (max-width: 700px) {
+            .modalImage-content {
+                width: 100%;
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI';
+            font-size: 12pt;
+        }
+
+        header h1 {
+            font-size: 12pt;
+            color: #fff;
+            background-color: #1BA1E2;
+            padding: 20px;
+
+        }
+
+        article {
+            width: 80%;
+            margin: auto;
+            margin-top: 10px;
+        }
+
+        .thumbnail {
+
+            height: 100px;
+            margin: 10px;
+            float: left;
+        }
+
+        #clear {
+            display: none;
+        }
+
+        #result {
+            border: 4px dotted #cccccc;
+            display: none;
+            float: right;
+            margin: 0 auto;
+            width: 511px;
+        }
+
+
+    </style>
+    <div class="container-fluid" style="padding-top:15px;">
+
+
+        <!-- alert Example -->
+        <div class="row">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" name="toggle" id="aPanelAlert"
+                               href="#collapseAlert">Alert Msg Example <span id="iconCollapseAlert"
+                                                                             class="fa fa-caret-down"><jsp:text/></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseAlert" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-sm btn-success" id="success">
+                                        Success
+                                    </button> &#160;
+                                    <button class="btn btn-sm btn-warning" id="warning">
+                                        Warning
+                                    </button> &#160;
+                                    <button class="btn btn-sm btn-danger" id="error">
+                                        Error
+                                    </button> &#160;
+
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-sm btn-info" id="basicAlert1">
+                                        ลบข้อมูลสำเร็จ
+                                    </button> &#160;
+                                    <button class="btn btn-sm btn-info" id="basicAlert2">
+                                        ไม่พบข้อมูล
+                                    </button> &#160;
+                                    <button class="btn btn-sm btn-info" id="basicAlert3">
+                                        ข้อมูลยังไม่ถูกบันทึก
+                                    </button> &#160;
+                                    <button class="btn btn-sm btn-info" id="basicAlert4">
+                                        ไม่สามารถทำรายการได้
+                                    </button> &#160;
+                                    <button class="btn btn-sm btn-info" id="basicAlert5">
+                                        confirm
+                                    </button> &#160;
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                References : <a href="https://sweetalert.js.org/docs/#configuration"
+                                                style="color:#FF80AB"> Sweet Alert </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:-1%">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" name="toggle"
+                               href="#collapseAutoComplete">AutoComplete(DDL) Example <span id="iconCollapseAlert"
+                                                                                            class="fa fa-caret-down"><jsp:text/></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseAutoComplete" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <jsp:text/>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-top:-1%">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" name="toggle" href="#collapseLov">Lov <span id="iconCollapseAlert"
+                                                                                                  class="fa fa-caret-down"><jsp:text/></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseLov" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <jsp:text/>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:-1%">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" name="toggle" href="#collapseTable">Table and Pagging <span
+                                    id="iconCollapseTable" class="fa fa-caret-down"><jsp:text/></span> </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTable" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+
+                            <!--  <div class="form-group">
+                              <div class="col-sm-12">
+                                <button type="button" data-target="#addModal" data-toggle="modal" titile="add" class="btn btn-sm btn-primary">
+                                    <span class="fa  fa-plus-circle"><jsp:text/></span>
+                                </button>
+                              </div>
+                             </div>
+                 -->
+                            <div class="form-group">
+                                <input type="text" id="money" class="form-control"/>
+                                <input type="text" onkeydown="FormUtil.inputNumberOnly(event)" class="form-control"/>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <table class="table table-bordered" id="table-id">
+                                        <thead style="background-color:#90CAF9;">
+                                        <tr>
+                                            <th class="text-center" onclick="sortData(this)" id="code"
+                                                style="color:black;">
+                                                ${LB_CODE}   <span class="fa fa-caret-up" style="display:none;"><jsp:text/></span>
+                                            </th>
+                                            <th class="text-center" onclick="sortData(this)" id="engName"
+                                                style="color:black;">
+                                                ${LB_NAME}  <span class="fa fa-caret-up" style="display:none;"><jsp:text/></span>
+                                            </th>
+                                            <th class="text-center" onclick="sortData(this)" id="referenceName"
+                                                style="color:black;">
+                                                ${LB_DOCUMENT_NUMBER}  <span class="fa fa-caret-up"
+                                                                             style="display:none;"><jsp:text/></span>
+                                            </th>
+                                            <th class="text-center" style="color:black;">
+                                                ${LB_SAVED_DATE}
+                                            </th>
+                                            <th class="text-center" style="color:black;">
+                                                ${LB_RECIEVE_DATE}
+                                            </th>
+                                            <th class="text-center" onclick="sortData(this)" id="moneyVar1"
+                                                style="color:black;">
+                                                ${LB_AMOUNT} <span class="fa fa-caret-up" style="display:none;"><jsp:text/></span>
+                                            </th>
+                                            <th class="text-center" id="" style="color:black;">
+                                                ${LB_DELETE}
+                                            </th>
+
+
+                                        </tr>
+                                        </thead>
+                                        <tbody id="dataGrid">
+                                        <jsp:text/>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:-1%">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" name="toggle"
+                               href="#collapsePreviewImage">Preview image before uploaded <span id="iconCollapseAlert"
+                                                                                                class="fa fa-caret-down"><jsp:text/></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapsePreviewImage" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <form id="form1" runat="server">
+                                    <input type='file' accept="image/*" id="imgInp"/>
+                                    <img id="myImg" src="#" alt="your image" width="200"/>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:-1%">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" name="toggle"
+                               href="#collapseValidateForm">validateForm <span id="iconCollapseAlert"
+                                                                               class="fa fa-caret-down"><jsp:text/></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseValidateForm" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                 <textarea validate="true" class="form-control   " name="" id="" cols="20" rows="1">
+                                            <jsp:text/>
+                                 </textarea>
+                                <button type="button" id="btnTestValidateForm" class="btn btn-sm btn-success">Submit
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- div container -->
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-top:-1%">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" name="toggle" href="#datePickerUtil">TEST DatePicker <span
+                                    id="iconCollapseAlert"
+                                    class="fa fa-caret-down"><jsp:text/></span>
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-top:-1%">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" name="toggle"
+                               href="#uploadMultipleImage">Upload multiple images with preview <span
+                                    id="iconCollapseAlert"
+                                    class="fa fa-caret-down"><jsp:text/></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="uploadMultipleImage" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <article>
+                                    <label for="files">Select multiple files: </label>
+                                    <input id="files" type="file" multiple="multiple"/>
+                                    <button type="button" id="clear">Clear</button>
+                                    <output id="result"/>
+                                </article>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+
+    <!-- The Modal For collapsePreviewImage-->
+    <div id="myModal" class="modalImage">
+
+        <!-- The Close Button -->
+        <span id="closeModal" class="close">X</span>
+
+        <!-- Modal Content (The Image) -->
+        <img class="modalImage-content" id="img01"/>
+
+        <!-- Modal Caption (Image Text) -->
+        <div id="caption"></div>
+    </div>
+
+
+    <!-- load js -->
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/application/demos/inquiry.js')}" var="inquiry"/>
+    <script type="text/javascript" src="${inquiry}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/modalMessage.js')}" var="modalMessage"/>
+    <script type="text/javascript" src="${modalMessage}"><!-- required for FF3 and Opera --></script>
+
+    <!--ValidateForm-->
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/util/UtilForm.js')}" var="utilForm"/>
+    <script type="text/javascript" src="${utilForm}"><!-- required for FF3 and Opera --></script>
+
+    <spring:url value="${urls.getForLookupPath('/resources/scripts/jspdf.js')}" var="jspdf"/>
+    <script type="text/javascript" src="${jspdf}"><!-- required for FF3 and Opera --></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+
+
+</div>

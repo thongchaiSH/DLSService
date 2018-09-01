@@ -1,0 +1,87 @@
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:spring="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" version="2.0">
+    <jsp:output omit-xml-declaration="yes" />
+    <jsp:directive.attribute name="id" type="java.lang.String" required="true" rtexprvalue="true"/>
+    <div class="input-group">
+
+    	<input type="search" id="${id}" onkeyup="UtilLov.research()" onfocus="UtilLov.focusInput(this);" onclick="UtilLov.setId(this);" class="form-control" onblur="UtilLov.checkData(this)"/>
+    	
+ 
+        <span class="input-group-addon"  onclick="UtilLov.searchValueModal(this)"   id="${id}btnUtil"  data-target="#searchModal${id}" data-toggle="modal"  searchLabel="${id}_product"  >
+                  <span class="fa fa-search"><jsp:text/></span>
+        </span>
+    
+    </div>
+
+      <spring:url value="${urls.getForLookupPath('/resources/scripts/util/UtilLov.js')}"        var="UtilLov" />
+   	 <script type="text/javascript"  src="${UtilLov}" ><!-- required for FF3 and Opera --></script>
+
+      <div class="modal fade" data-backdrop="static" id="searchModal${id}" tabindex="-1" role="dialog" style="z-index: 1060">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"  aria-label="Close"><span aria-hidden="true" class="fa fa-remove"><jsp:text/></span>
+                    </button>
+                    <h3 class="modal-title"> Search </h3>
+                </div>
+                <div class="modal-body">
+                      <div class="form-group">
+                          <div class="col-sm-12">
+                                <!-- <label class="control-label"  id="${id}_product">  </label> -->
+
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" id="${id}_product" />
+                                      <span class="input-group-addon"  onclick="UtilLov.searchKeyword()"  id="${id}btnUtil" data-target="${id}" >
+                                              <span class="fa fa-search"><jsp:text/></span>
+                                      </span>
+
+                                 </div>                       
+
+      
+
+    
+
+                          </div>                        
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered">
+                              <thead style="background-color:#90CAF9;" >
+                                <tr>
+                                    <th class="text-center"  id="code" style="color:black;">
+                                      Code   </th>
+                                    <th class="text-center"  id="engName" style="color:black;">
+                                      Name </th>
+                     
+                                    
+                                </tr>
+                              </thead> 
+                              <tbody id="modalTable">
+                                <jsp:text/>
+                              </tbody>
+
+                            </table>
+                        </div>
+                      </div>
+                    
+                      <div class="form-group">
+                             <util:pagingutil id="paggingModal"/>
+
+                      </div>
+                      
+
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"  > Close <span
+                            aria-hidden="true" class="fa fa-remove"><jsp:text/></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</jsp:root>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- configuration file for LogBack (slf4J implementation)
+See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-through-the-java-loggers/ -->
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <!-- To enable JMX Management -->
+    <jmxConfigurator/>
+    
+    
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>debug</level>
+		</filter>
+		<withJansi>true</withJansi>
+        <encoder name="enc" class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+        	<layout class="com.dlearn.engine.logback.PatternLayoutWithUserContext">
+            	<!--<param name="Pattern" value="%d{HH:mm:ss.SSS} [%warname] %-5level  %logger [%session] - %msg%n" />-->
+            	<param name="Pattern" value="%d{HH:mm:ss.SSS}  %green[%warname]  %highlight(%level) - %msg%n" />
+        	</layout>
+        </encoder>
+    </appender>
+
+  
+  <appender name="LOGROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	  	<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+	        <level>INFO</level>
+	    </filter>
+		<file>${catalina.base}/logs/${applicationName}.log</file>
+	  	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	    		<fileNamePattern>${catalina.base}/logs/${applicationName}.%d{yyyy-MM-dd}.%i.logs.zip</fileNamePattern>
+	    		<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	    		<maxFileSize>10KB</maxFileSize>
+	    		</timeBasedFileNamingAndTriggeringPolicy>
+	  	</rollingPolicy>
+	  	
+	  	<encoder name="enc" class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+	        	<layout class="com.dlearn.engine.logback.PatternLayoutWithUserContext">
+	            	<param name="Pattern" value="%d{HH:mm:ss.SSS} [%warname] %-5level  %logger [%session] - %msg%n" />
+	        	</layout>
+        </encoder>
+   </appender> 
+  
+
+    <appender name="ACCESSLOGROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<file>${catalina.base}/logs/${applicationName}-access.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.base}/logs/${applicationName}-access.%d{yyyy-MM-dd}.%i.logs.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10KB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+
+		<encoder name="enc" class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout class="com.dlearn.engine.logback.PatternLayoutWithUserContext">
+				<param name="Pattern" value="%d{HH:mm:ss.SSS} [%warname] %-5level  %logger [%session] - %msg%n" />
+			</layout>
+		</encoder>
+	</appender>
+         
+    <root level="error">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGROLLING" />
+    </root>
+
+
+	<logger name="com.dlearn.engine" level="debug" additivity="false">
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="com.dlearn.engine" level="DEBUG" />
+</configuration>
