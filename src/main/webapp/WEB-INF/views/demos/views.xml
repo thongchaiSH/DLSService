@@ -8,9 +8,6 @@
   <definition name="demos/inquiry" extends="default">
     <put-attribute name="body" value="/WEB-INF/views/demos/inquiry.jspx" />
   </definition>
-  <definition name="demos/testPassParam" extends="default">
-    <put-attribute name="body" value="/WEB-INF/views/demos/testPassParam.jspx" />
-  </definition>
 
 
 </tiles-definitions>

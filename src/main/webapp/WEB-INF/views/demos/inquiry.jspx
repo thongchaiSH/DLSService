@@ -12,466 +12,279 @@
     <c:set scope="request" var="LB_AMOUNT"><spring:message code="LB_AMOUNT"/></c:set>
     <c:set scope="request" var="LB_DELETE"><spring:message code="LB_DELETE"/></c:set>
 
-    <style>
-        /* Style the Image Used to Trigger the Modal */
-        #myImg {
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+    <div class="container-fluid">
 
-        #myImg:hover {
-            opacity: 0.7;
-        }
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Overview</li>
+        </ol>
 
-        /* The Modal (background) */
-        .modalImage {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            padding-top: 100px; /* Location of the box */
-            left: 0;
-            top: 25px;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0); /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
-        }
-
-        /* Modal Content (Image) */
-        .modalImage-content {
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-        }
-
-        /* Caption of Modal Image (Image Text) - Same Width as the Image */
-        #caption {
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-            text-align: center;
-            color: #ccc;
-            padding: 10px 0;
-            height: 150px;
-        }
-
-        /* Add Animation - Zoom in the Modal */
-        .modalImage-content, #caption {
-            -webkit-animation-name: zoom;
-            -webkit-animation-duration: 0.6s;
-            animation-name: zoom;
-            animation-duration: 0.6s;
-        }
-
-        @-webkit-keyframes zoom {
-            from {
-                -webkit-transform: scale(0)
-            }
-            to {
-                -webkit-transform: scale(1)
-            }
-        }
-
-        @keyframes zoom {
-            from {
-                transform: scale(0)
-            }
-            to {
-                transform: scale(1)
-            }
-        }
-
-        /* The Close Button */
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* 100% Image Width on Smaller Screens */
-        @media only screen and (max-width: 700px) {
-            .modalImage-content {
-                width: 100%;
-            }
-        }
-
-        body {
-            font-family: 'Segoe UI';
-            font-size: 12pt;
-        }
-
-        header h1 {
-            font-size: 12pt;
-            color: #fff;
-            background-color: #1BA1E2;
-            padding: 20px;
-
-        }
-
-        article {
-            width: 80%;
-            margin: auto;
-            margin-top: 10px;
-        }
-
-        .thumbnail {
-
-            height: 100px;
-            margin: 10px;
-            float: left;
-        }
-
-        #clear {
-            display: none;
-        }
-
-        #result {
-            border: 4px dotted #cccccc;
-            display: none;
-            float: right;
-            margin: 0 auto;
-            width: 511px;
-        }
-
-
-    </style>
-    <div class="container-fluid" style="padding-top:15px;">
-
-
-        <!-- alert Example -->
+        <!-- Icon Cards-->
         <div class="row">
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" name="toggle" id="aPanelAlert"
-                               href="#collapseAlert">Alert Msg Example <span id="iconCollapseAlert"
-                                                                             class="fa fa-caret-down"><jsp:text/></span>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseAlert" class="panel-collapse collapse">
-                        <div class="panel-body">
-
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <button class="btn btn-sm btn-success" id="success">
-                                        Success
-                                    </button> &#160;
-                                    <button class="btn btn-sm btn-warning" id="warning">
-                                        Warning
-                                    </button> &#160;
-                                    <button class="btn btn-sm btn-danger" id="error">
-                                        Error
-                                    </button> &#160;
-
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <button class="btn btn-sm btn-info" id="basicAlert1">
-                                        ลบข้อมูลสำเร็จ
-                                    </button> &#160;
-                                    <button class="btn btn-sm btn-info" id="basicAlert2">
-                                        ไม่พบข้อมูล
-                                    </button> &#160;
-                                    <button class="btn btn-sm btn-info" id="basicAlert3">
-                                        ข้อมูลยังไม่ถูกบันทึก
-                                    </button> &#160;
-                                    <button class="btn btn-sm btn-info" id="basicAlert4">
-                                        ไม่สามารถทำรายการได้
-                                    </button> &#160;
-                                    <button class="btn btn-sm btn-info" id="basicAlert5">
-                                        confirm
-                                    </button> &#160;
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                References : <a href="https://sweetalert.js.org/docs/#configuration"
-                                                style="color:#FF80AB"> Sweet Alert </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" style="margin-top:-1%">
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" name="toggle"
-                               href="#collapseAutoComplete">AutoComplete(DDL) Example <span id="iconCollapseAlert"
-                                                                                            class="fa fa-caret-down"><jsp:text/></span>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseAutoComplete" class="panel-collapse collapse">
-                        <div class="panel-body">
-
-                            <div class="form-group">
+            <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white bg-primary o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fas fa-fw fa-comments">
                                 <jsp:text/>
-                            </div>
-
+                            </i>
                         </div>
+                        <div class="mr-5">26 New Messages!</div>
                     </div>
+                    <a class="card-footer text-white clearfix small z-1" href="#">
+                        <span class="float-left">View Details</span>
+                        <span class="float-right">
+                    <i class="fas fa-angle-right"><jsp:text/></i>
+                  </span>
+                    </a>
                 </div>
             </div>
-        </div>
-
-
-        <div class="row" style="margin-top:-1%">
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" name="toggle" href="#collapseLov">Lov <span id="iconCollapseAlert"
-                                                                                                  class="fa fa-caret-down"><jsp:text/></span>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseLov" class="panel-collapse collapse">
-                        <div class="panel-body">
-
-                            <div class="form-group">
+            <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white bg-warning o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fas fa-fw fa-list">
                                 <jsp:text/>
-                            </div>
-
+                            </i>
                         </div>
+                        <div class="mr-5">11 New Tasks!</div>
                     </div>
+                    <a class="card-footer text-white clearfix small z-1" href="#">
+                        <span class="float-left">View Details</span>
+                        <span class="float-right">
+                    <i class="fas fa-angle-right"><jsp:text/></i>
+                  </span>
+                    </a>
                 </div>
             </div>
-        </div>
-        <div class="row" style="margin-top:-1%">
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" name="toggle" href="#collapseTable">Table and Pagging <span
-                                    id="iconCollapseTable" class="fa fa-caret-down"><jsp:text/></span> </a>
-                        </h4>
-                    </div>
-                    <div id="collapseTable" class="panel-collapse collapse">
-                        <div class="panel-body">
-
-
-                            <!--  <div class="form-group">
-                              <div class="col-sm-12">
-                                <button type="button" data-target="#addModal" data-toggle="modal" titile="add" class="btn btn-sm btn-primary">
-                                    <span class="fa  fa-plus-circle"><jsp:text/></span>
-                                </button>
-                              </div>
-                             </div>
-                 -->
-                            <div class="form-group">
-                                <input type="text" id="money" class="form-control"/>
-                                <input type="text" onkeydown="FormUtil.inputNumberOnly(event)" class="form-control"/>
-                            </div>
-
-
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <table class="table table-bordered" id="table-id">
-                                        <thead style="background-color:#90CAF9;">
-                                        <tr>
-                                            <th class="text-center" onclick="sortData(this)" id="code"
-                                                style="color:black;">
-                                                ${LB_CODE}   <span class="fa fa-caret-up" style="display:none;"><jsp:text/></span>
-                                            </th>
-                                            <th class="text-center" onclick="sortData(this)" id="engName"
-                                                style="color:black;">
-                                                ${LB_NAME}  <span class="fa fa-caret-up" style="display:none;"><jsp:text/></span>
-                                            </th>
-                                            <th class="text-center" onclick="sortData(this)" id="referenceName"
-                                                style="color:black;">
-                                                ${LB_DOCUMENT_NUMBER}  <span class="fa fa-caret-up"
-                                                                             style="display:none;"><jsp:text/></span>
-                                            </th>
-                                            <th class="text-center" style="color:black;">
-                                                ${LB_SAVED_DATE}
-                                            </th>
-                                            <th class="text-center" style="color:black;">
-                                                ${LB_RECIEVE_DATE}
-                                            </th>
-                                            <th class="text-center" onclick="sortData(this)" id="moneyVar1"
-                                                style="color:black;">
-                                                ${LB_AMOUNT} <span class="fa fa-caret-up" style="display:none;"><jsp:text/></span>
-                                            </th>
-                                            <th class="text-center" id="" style="color:black;">
-                                                ${LB_DELETE}
-                                            </th>
-
-
-                                        </tr>
-                                        </thead>
-                                        <tbody id="dataGrid">
-                                        <jsp:text/>
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-
+            <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white bg-success o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fas fa-fw fa-shopping-cart">
+                                <jsp:text/>
+                            </i>
                         </div>
+                        <div class="mr-5">123 New Orders!</div>
                     </div>
+                    <a class="card-footer text-white clearfix small z-1" href="#">
+                        <span class="float-left">View Details</span>
+                        <span class="float-right">
+                    <i class="fas fa-angle-right"><jsp:text/></i>
+                  </span>
+                    </a>
                 </div>
             </div>
-        </div>
-
-        <div class="row" style="margin-top:-1%">
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" name="toggle"
-                               href="#collapsePreviewImage">Preview image before uploaded <span id="iconCollapseAlert"
-                                                                                                class="fa fa-caret-down"><jsp:text/></span>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapsePreviewImage" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <form id="form1" runat="server">
-                                    <input type='file' accept="image/*" id="imgInp"/>
-                                    <img id="myImg" src="#" alt="your image" width="200"/>
-                                </form>
-                            </div>
-
+            <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white bg-danger o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fas fa-fw fa-life-ring">
+                                <jsp:text/>
+                            </i>
                         </div>
+                        <div class="mr-5">13 New Tickets!</div>
                     </div>
+                    <a class="card-footer text-white clearfix small z-1" href="#">
+                        <span class="float-left">View Details</span>
+                        <span class="float-right">
+                    <i class="fas fa-angle-right"><jsp:text/></i>
+                  </span>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <div class="row" style="margin-top:-1%">
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" name="toggle"
-                               href="#collapseValidateForm">validateForm <span id="iconCollapseAlert"
-                                                                               class="fa fa-caret-down"><jsp:text/></span>
-                            </a>
-                        </h4>
+        <!-- Area Chart Example-->
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-chart-area">
+                    <jsp:text/>
+                </i>
+                Area Chart Example
+            </div>
+            <div class="card-body">
+                <div class="chartjs-size-monitor"
+                     style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+                    <div class="chartjs-size-monitor-expand"
+                         style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                        <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
                     </div>
-                    <div id="collapseValidateForm" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                 <textarea validate="true" class="form-control   " name="" id="" cols="20" rows="1">
-                                            <jsp:text/>
-                                 </textarea>
-                                <button type="button" id="btnTestValidateForm" class="btn btn-sm btn-success">Submit
-                                </button>
-                            </div>
+                    <div class="chartjs-size-monitor-shrink"
+                         style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                        <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
+                    </div>
+                </div>
+                <canvas id="myAreaChart" width="1019" height="305" class="chartjs-render-monitor"
+                        style="display: block; width: 1019px; height: 305px;"></canvas>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
 
+        <!-- DataTables Example -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-table">
+                    <jsp:text/>
+                </i>
+                Data Table Example
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered dataTable" id="dataTable" width="100%"
+                                       cellspacing="0" role="grid" aria-describedby="dataTable_info"
+                                       style="width: 100%;">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                            colspan="1" aria-sort="ascending"
+                                            aria-label="Name: activate to sort column descending"
+                                            style="width: 156px;">Name
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                            colspan="1" aria-label="Position: activate to sort column ascending"
+                                            style="width: 246px;">Position
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                            colspan="1" aria-label="Office: activate to sort column ascending"
+                                            style="width: 117px;">Office
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                            colspan="1" aria-label="Age: activate to sort column ascending"
+                                            style="width: 49px;">Age
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                            colspan="1" aria-label="Start date: activate to sort column ascending"
+                                            style="width: 104px;">Start date
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                            colspan="1" aria-label="Salary: activate to sort column ascending"
+                                            style="width: 90px;">Salary
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <th rowspan="1" colspan="1">Name</th>
+                                        <th rowspan="1" colspan="1">Position</th>
+                                        <th rowspan="1" colspan="1">Office</th>
+                                        <th rowspan="1" colspan="1">Age</th>
+                                        <th rowspan="1" colspan="1">Start date</th>
+                                        <th rowspan="1" colspan="1">Salary</th>
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">Airi Satou</td>
+                                        <td>Accountant</td>
+                                        <td>Tokyo</td>
+                                        <td>33</td>
+                                        <td>2008/11/28</td>
+                                        <td>$162,700</td>
+                                    </tr>
+                                    <tr role="row" class="even">
+                                        <td class="sorting_1">Angelica Ramos</td>
+                                        <td>Chief Executive Officer (CEO)</td>
+                                        <td>London</td>
+                                        <td>47</td>
+                                        <td>2009/10/09</td>
+                                        <td>$1,200,000</td>
+                                    </tr>
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">Ashton Cox</td>
+                                        <td>Junior Technical Author</td>
+                                        <td>San Francisco</td>
+                                        <td>66</td>
+                                        <td>2009/01/12</td>
+                                        <td>$86,000</td>
+                                    </tr>
+                                    <tr role="row" class="even">
+                                        <td class="sorting_1">Bradley Greer</td>
+                                        <td>Software Engineer</td>
+                                        <td>London</td>
+                                        <td>41</td>
+                                        <td>2012/10/13</td>
+                                        <td>$132,000</td>
+                                    </tr>
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">Brenden Wagner</td>
+                                        <td>Software Engineer</td>
+                                        <td>San Francisco</td>
+                                        <td>28</td>
+                                        <td>2011/06/07</td>
+                                        <td>$206,850</td>
+                                    </tr>
+                                    <tr role="row" class="even">
+                                        <td class="sorting_1">Brielle Williamson</td>
+                                        <td>Integration Specialist</td>
+                                        <td>New York</td>
+                                        <td>61</td>
+                                        <td>2012/12/02</td>
+                                        <td>$372,000</td>
+                                    </tr>
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">Bruno Nash</td>
+                                        <td>Software Engineer</td>
+                                        <td>London</td>
+                                        <td>38</td>
+                                        <td>2011/05/03</td>
+                                        <td>$163,500</td>
+                                    </tr>
+                                    <tr role="row" class="even">
+                                        <td class="sorting_1">Caesar Vance</td>
+                                        <td>Pre-Sales Support</td>
+                                        <td>New York</td>
+                                        <td>21</td>
+                                        <td>2011/12/12</td>
+                                        <td>$106,450</td>
+                                    </tr>
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">Cara Stevens</td>
+                                        <td>Sales Assistant</td>
+                                        <td>New York</td>
+                                        <td>46</td>
+                                        <td>2011/12/06</td>
+                                        <td>$145,600</td>
+                                    </tr>
+                                    <tr role="row" class="even">
+                                        <td class="sorting_1">Cedric Kelly</td>
+                                        <td>Senior Javascript Developer</td>
+                                        <td>Edinburgh</td>
+                                        <td>22</td>
+                                        <td>2012/03/29</td>
+                                        <td>$433,060</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                     </div>
-                    <!-- div container -->
-
                 </div>
             </div>
-
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
 
-        <div class="row" style="margin-top:-1%">
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" name="toggle" href="#datePickerUtil">TEST DatePicker <span
-                                    id="iconCollapseAlert"
-                                    class="fa fa-caret-down"><jsp:text/></span>
-                            </a>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row" style="margin-top:-1%">
-            <div class="panel-group">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" name="toggle"
-                               href="#uploadMultipleImage">Upload multiple images with preview <span
-                                    id="iconCollapseAlert"
-                                    class="fa fa-caret-down"><jsp:text/></span>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="uploadMultipleImage" class="panel-collapse collapse">
-                        <div class="panel-body">
-
-                            <div class="form-group">
-                                <article>
-                                    <label for="files">Select multiple files: </label>
-                                    <input id="files" type="file" multiple="multiple"/>
-                                    <button type="button" id="clear">Clear</button>
-                                    <output id="result"/>
-                                </article>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-
-    <!-- modal -->
-
-    <!-- The Modal For collapsePreviewImage-->
-    <div id="myModal" class="modalImage">
-
-        <!-- The Close Button -->
-        <span id="closeModal" class="close">X</span>
-
-        <!-- Modal Content (The Image) -->
-        <img class="modalImage-content" id="img01"/>
-
-        <!-- Modal Caption (Image Text) -->
-        <div id="caption"></div>
-    </div>
+    <!-- /.container-fluid -->
 
 
-    <!-- load js -->
-    <spring:url value="${urls.getForLookupPath('/resources/scripts/application/demos/inquiry.js')}" var="inquiry"/>
-    <script type="text/javascript" src="${inquiry}"><!-- required for FF3 and Opera --></script>
 
-    <spring:url value="${urls.getForLookupPath('/resources/scripts/modalMessage.js')}" var="modalMessage"/>
-    <script type="text/javascript" src="${modalMessage}"><!-- required for FF3 and Opera --></script>
 
-    <!--ValidateForm-->
-    <spring:url value="${urls.getForLookupPath('/resources/scripts/util/UtilForm.js')}" var="utilForm"/>
-    <script type="text/javascript" src="${utilForm}"><!-- required for FF3 and Opera --></script>
-
-    <spring:url value="${urls.getForLookupPath('/resources/scripts/jspdf.js')}" var="jspdf"/>
-    <script type="text/javascript" src="${jspdf}"><!-- required for FF3 and Opera --></script>
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
-
+    <script>
+        $(function () {
+            // Call the dataTables jQuery plugin
+            $(document).ready(function () {
+                $('#dataTable').DataTable();
+            });
+        });
+    </script>
 
 </div>
